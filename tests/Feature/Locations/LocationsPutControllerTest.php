@@ -56,7 +56,7 @@ final class LocationsPutControllerTest extends TestCase
             'companyId' => Uuid::uuid4()->toString(),
             'itemState' => 'disponible'
         ]);
-dd($response->getContent());
+
         $response->assertJson([]);
         $response->assertStatus(200);
     }

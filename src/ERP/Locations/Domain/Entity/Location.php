@@ -41,8 +41,8 @@ final class Location
         LocationDirection $direction,
         LocationCompanyId $companyId,
         LocationItemState $itemState,
-        LocationCreatedAt $createdAt,
-        LocationUpdatedAt $updatedAt
+        DateTimeValueObject $createdAt,
+        DateTimeValueObject $updatedAt
     )
     {
         $this->id = $id;
@@ -80,8 +80,9 @@ final class Location
             $direction,
             $companyId,
             $itemState,
-            new LocationCreatedAt(),
-            new LocationUpdatedAt()
+            DateTimeValueObject::now(),
+            DateTimeValueObject::now()
+
         );
     }
 
@@ -95,8 +96,8 @@ final class Location
         LocationDirection $direction,
         LocationCompanyId $companyId,
         LocationItemState $itemState,
-        LocationCreatedAt $createdAt,
-        LocationUpdatedAt $updatedAt
+        DateTimeValueObject $createdAt,
+        DateTimeValueObject $updatedAt
     ): self
     {
         return new self(
@@ -158,12 +159,12 @@ final class Location
     {
         return $this->itemState;
     }
-    public function createdAt(): LocationCreatedAt
+    public function createdAt(): DateTimeValueObject
     {
         return $this->createdAt;
     }
 
-    public function updatedAt(): LocationUpdatedAt
+    public function updatedAt(): DateTimeValueObject
     {
         return $this->updatedAt;
     }
