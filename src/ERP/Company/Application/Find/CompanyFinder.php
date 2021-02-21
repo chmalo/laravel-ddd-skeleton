@@ -13,7 +13,7 @@ final class CompanyFinder
 {
     private $finder;
 
-    public function __construct(\Medine\ERP\Company\Domain\Service\CompanyFinder $finder)
+    public function __construct(\Medine\ERP\Company\Domain\Service\LocationFinder $finder)
     {
         $this->finder = $finder;
     }

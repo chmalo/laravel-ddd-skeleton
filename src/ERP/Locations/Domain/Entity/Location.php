@@ -15,6 +15,7 @@ use Medine\ERP\Locations\Domain\ValueObject\LocationMainContact;
 use Medine\ERP\Locations\Domain\ValueObject\LocationName;
 use Medine\ERP\Locations\Domain\ValueObject\LocationState;
 use Medine\ERP\Locations\Domain\ValueObject\LocationUpdatedAt;
+use Medine\ERP\Shared\Domain\ValueObjects\DateTimeValueObject;
 
 final class Location
 {
@@ -84,6 +85,35 @@ final class Location
         );
     }
 
+    public static function fromDatabase(
+        LocationId $id,
+        LocationCode $code,
+        LocationName $name,
+        LocationMainContact $mainContact,
+        LocationBarcode $barcode,
+        LocationState $state,
+        LocationDirection $direction,
+        LocationCompanyId $companyId,
+        LocationItemState $itemState,
+        LocationCreatedAt $createdAt,
+        LocationUpdatedAt $updatedAt
+    ): self
+    {
+        return new self(
+            $id,
+            $code,
+            $name,
+            $mainContact,
+            $barcode,
+            $state,
+            $direction,
+            $companyId,
+            $itemState,
+            $createdAt,
+            $updatedAt
+        );
+    }
+
     public function id(): LocationId
     {
         return $this->id;
@@ -136,5 +166,69 @@ final class Location
     public function updatedAt(): LocationUpdatedAt
     {
         return $this->updatedAt;
+    }
+
+    public function changeCode(LocationCode $code)
+    {
+        if (false === ($this->code()->equals($code))) {
+            $this->code = $code;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeName(LocationName $name)
+    {
+        if (false === ($this->name()->equals($name))) {
+            $this->name = $name;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeMainContact(LocationMainContact $mainContact)
+    {
+        if (false === ($this->mainContact()->equals($mainContact))) {
+            $this->mainContact = $mainContact;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeBarcode(LocationBarcode $barcode)
+    {
+        if (false === ($this->barcode()->equals($barcode))) {
+            $this->barcode = $barcode;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeState(LocationState $state)
+    {
+        if (false === ($this->state()->equals($state))) {
+            $this->state = $state;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeDirection(LocationDirection $direction)
+    {
+        if (false === ($this->direction()->equals($direction))) {
+            $this->direction = $direction;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeCompanyId(LocationCompanyId $companyId)
+    {
+        if (false === ($this->companyId()->equals($companyId))) {
+            $this->companyId = $companyId;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
+    }
+
+    public function changeItemState(LocationItemState $itemState)
+    {
+        if (false === ($this->itemState()->equals($itemState))) {
+            $this->itemState = $itemState;
+            $this->updatedAt = DateTimeValueObject::now();
+        }
     }
 }
