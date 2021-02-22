@@ -7,14 +7,12 @@ namespace Medine\ERP\Locations\Domain\Entity;
 use Medine\ERP\Locations\Domain\ValueObject\LocationBarcode;
 use Medine\ERP\Locations\Domain\ValueObject\LocationCode;
 use Medine\ERP\Locations\Domain\ValueObject\LocationCompanyId;
-use Medine\ERP\Locations\Domain\ValueObject\LocationCreatedAt;
 use Medine\ERP\Locations\Domain\ValueObject\LocationDirection;
 use Medine\ERP\Locations\Domain\ValueObject\LocationId;
 use Medine\ERP\Locations\Domain\ValueObject\LocationItemState;
 use Medine\ERP\Locations\Domain\ValueObject\LocationMainContact;
 use Medine\ERP\Locations\Domain\ValueObject\LocationName;
 use Medine\ERP\Locations\Domain\ValueObject\LocationState;
-use Medine\ERP\Locations\Domain\ValueObject\LocationUpdatedAt;
 use Medine\ERP\Shared\Domain\ValueObjects\DateTimeValueObject;
 
 final class Location
@@ -159,6 +157,7 @@ final class Location
     {
         return $this->itemState;
     }
+
     public function createdAt(): DateTimeValueObject
     {
         return $this->createdAt;
