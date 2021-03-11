@@ -1,5 +1,3 @@
-
-
 /* ------------------------------
 [Default Color Codes Used In The Project]
 
@@ -1606,6 +1604,7 @@ ul.list-inline li h6 {
 
 label {
     color: #576984;
+    height: 21px;
 }
 
 .form-control {
@@ -16241,4 +16240,48 @@ ul.pro-amenities li span i {
     .numbered-bg .step-title {
         padding-right: 0;
     }
+}
+
+.no-data > tbody > tr > td > h2 {
+    color: #576984;
+    font-weight: 700;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-size: 22px;
+}
+
+.no-data {
+    border: 1px solid #cef0fa;
+}
+
+.pre-loader-form div > div > div.pg-empty-placeholder {
+    background-color: #ebeeee;
+    width: 100%;
+    height: 180px;
+}
+
+.pre-loader-form > div > div > label {
+    color: rgba(0, 0, 0, 0);
+    background-color: #ebeeee;
+}
+
+.pre-loader-form > div > div > div {
+    background-color: #ebeeee;
+    height: 38px;
+    width: 100%;
+}
+
+.pre-loader-form > div > div > label {
+    background-color: #ebeeee;
+    height: 21px;
+}
+
+.pre-loader-form > div > div > div > div > div.form-control {
+    background-color: #ebeeee;
+    height: 38px;
+}
+
+.pre-loader-form > div > div > div > div > label {
+    color: rgba(0, 0, 0, 0);
+    background-color: #ebeeee;
 }

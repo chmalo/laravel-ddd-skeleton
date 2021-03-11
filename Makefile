@@ -18,8 +18,6 @@ ps:
 logs:
 	docker-compose -f docker-compose.yml logs --tail=100 -f
 
-logs-php:
-	docker-compose -f docker-compose.yml logs --tail=100 -f php
 login-php:
 	docker-compose -f docker-compose.yml exec php sh
 
@@ -27,6 +25,9 @@ logs-mysql:
 	docker-compose -f docker-compose.yml logs --tail=100 -f mysql
 login-mysql:
 	docker-compose -f docker-compose.yml exec mysql /bin/bash
+
+logs-php:
+	docker-compose -f docker-compose.yml logs --tail=100 -f php
 
 logs-nginx:
 	docker-compose -f docker-compose.yml logs --tail=100 -f nginx
@@ -48,3 +49,8 @@ migrate-refresh:
 
 migrate-rollback:
 	docker-compose exec php php artisan migrate:rollback
+
+swap-memory:
+	/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+	/sbin/mkswap /var/swap.1
+	/sbin/swapon /var/swap.1

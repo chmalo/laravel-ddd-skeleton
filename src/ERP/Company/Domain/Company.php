@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Medine\ERP\Company\Domain;
-
 
 use Medine\ERP\Company\Domain\ValueObjects\CompanyAddress;
 use Medine\ERP\Company\Domain\ValueObjects\CompanyCreatedAt;
@@ -24,6 +22,8 @@ final class Company
     private $logo;
     private $createdAt;
     private $updatedAt;
+    private $usersQuantity;
+    private $stateValue;
 
     private function __construct(
         CompanyId $id,
@@ -70,10 +70,12 @@ final class Company
         CompanyState $state,
         CompanyLogo $logo,
         CompanyCreatedAt $createdAt,
-        CompanyUpdatedAt $updatedAt
+        CompanyUpdatedAt $updatedAt,
+        int $usersQuantity,
+        string $stateValue
     ): self
     {
-        return new self(
+        $company = new self(
             $id,
             $name,
             $address,
@@ -82,6 +84,10 @@ final class Company
             $createdAt,
             $updatedAt
         );
+        $company->usersQuantity = $usersQuantity;
+        $company->stateValue = $stateValue;
+
+        return $company;
     }
 
     public function id(): CompanyId
@@ -149,5 +155,15 @@ final class Company
             $this->logo = $newLogo;
             $this->updatedAt = new CompanyUpdatedAt();
         }
+    }
+
+    public function usersQuantity(): int
+    {
+        return $this->usersQuantity;
+    }
+
+    public function stateValue(): string
+    {
+        return $this->stateValue;
     }
 }

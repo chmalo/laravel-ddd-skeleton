@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medine\ERP\Company\Infrastructure;
 
-use Carbon\Carbon;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 use Medine\ERP\Company\Domain\Company;
-use Medine\ERP\Company\Domain\CompanyCode;
 use Medine\ERP\Company\Domain\CompanyRepository;
 use Medine\ERP\Company\Domain\ValueObjects\CompanyAddress;
 use Medine\ERP\Company\Domain\ValueObjects\CompanyCreatedAt;
@@ -48,7 +47,15 @@ final class MySqlCompanyRepository extends MySqlRepository implements CompanyRep
 
     public function find(CompanyId $id): ?Company
     {
-        $row = DB::table('companies')->where('companies.id', $id->value())->first();
+        $row = DB::table('companies')
+            ->join('catalogs', function (JoinClause $join) {
+                $join->on('catalogs.tag', '=', 'companies.state');
+                $join->where('catalogs.type', '=', 'state');
+                $join->where('catalogs.module', '=', 'companies');
+            })
+            ->where('companies.id', $id->value())
+            ->select(['companies.id', 'name', 'address', 'state', 'logo', 'companies.created_at', 'companies.updated_at', 'users_quantity', DB::raw('catalogs.value as stateValue')])
+            ->first();
 
         return !empty($row) ? Company::fromDatabase(
             new CompanyId($row->id),
@@ -57,7 +64,9 @@ final class MySqlCompanyRepository extends MySqlRepository implements CompanyRep
             new CompanyState($row->state),
             new CompanyLogo($row->logo),
             new CompanyCreatedAt($row->created_at),
-            new CompanyUpdatedAt($row->updated_at)
+            new CompanyUpdatedAt($row->updated_at),
+            $row->users_quantity,
+            $row->stateValue
         ) : null;
     }
 
@@ -67,6 +76,13 @@ final class MySqlCompanyRepository extends MySqlRepository implements CompanyRep
         $query = (new MySqlCompanyFilters($query))($criteria);
         $query = $this->completeBuilder($criteria, $query);
 
+        $query->join('catalogs', function (JoinClause $join) {
+            $join->on('catalogs.tag', '=', 'companies.state');
+            $join->where('catalogs.type', '=', 'state');
+            $join->where('catalogs.module', '=', 'companies');
+        });
+        $query->select(['companies.id', 'name', 'address', 'state', 'logo', 'companies.created_at', 'companies.updated_at', 'users_quantity', DB::raw('catalogs.value as stateValue')]);
+
         return $query->get()->map(function ($row) {
             return Company::fromDatabase(
                 new CompanyId($row->id),
@@ -75,7 +91,9 @@ final class MySqlCompanyRepository extends MySqlRepository implements CompanyRep
                 new CompanyState($row->state),
                 new CompanyLogo($row->logo),
                 new CompanyCreatedAt($row->created_at),
-                new CompanyUpdatedAt($row->updated_at)
+                new CompanyUpdatedAt($row->updated_at),
+                $row->users_quantity,
+                $row->stateValue
             );
         })->toArray();
     }

@@ -1,19 +1,19 @@
-import './assets/css/app.scss';
+//css root
+import './assets/css/app.scss'
 
+//others
+import {createApp} from "vue";
+//import vSelect from 'vue-select'
+import Select2 from './components/Select2.vue';
+import App from "./App.vue";
+import router from "./router";
 
-import Vue from 'vue'
-import vSelect from 'vue-select'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+//css overwrite
 import 'bootstrap'
-import 'vue-select/dist/vue-select.css'
+//import 'vue-select/dist/vue-select.css'
 
-Vue.config.productionTip = false
-Vue.component('v-select', vSelect)
-
-new Vue({
-    router,
-    store,
-    render: h => h(App)
-}).$mount('#app')
+createApp(App)
+    .use(router)
+    .component('select2', Select2)
+    //.component('v-select', vSelect)
+    .mount("#app");
