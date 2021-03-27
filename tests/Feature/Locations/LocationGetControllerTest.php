@@ -33,10 +33,10 @@ final class LocationGetControllerTest extends TestCase
         );
         $location = $this->location();
         $response = $this->postJson('/api/location', $location);
-
+dd($response->getContent());
         $response->assertJson([]);
         $response->assertStatus(201);
-
+        dd($response->getContent());
         $response = $this->getJson('/api/location/' . $location['id']);
 
         $response->assertJson($location);
@@ -46,14 +46,14 @@ final class LocationGetControllerTest extends TestCase
     private function location(): array
     {
         return [
-            'id' => Uuid::uuid4()->toString(),
+            'id' => \Medine\ERP\Shared\Domain\ValueObjects\Uuid::random()->value(),
             'code' => $this->faker->postcode,
             'name' => 'bodega',
             'mainContact' => $this->faker->name,
             'barcode' => $this->faker->postcode,
             'state' => 'activo',
             'direction' => 'el paraiso',
-            'companyId' => Uuid::uuid4()->toString(),
+            'companyId' => \Medine\ERP\Shared\Domain\ValueObjects\Uuid::random()->value(),
             'itemState' => 'disponible'
         ];
     }

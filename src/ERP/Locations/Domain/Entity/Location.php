@@ -7,13 +7,14 @@ namespace Medine\ERP\Locations\Domain\Entity;
 use Medine\ERP\Locations\Domain\ValueObject\LocationBarcode;
 use Medine\ERP\Locations\Domain\ValueObject\LocationCode;
 use Medine\ERP\Locations\Domain\ValueObject\LocationCompanyId;
-use Medine\ERP\Locations\Domain\ValueObject\LocationDirection;
+use Medine\ERP\Locations\Domain\ValueObject\LocationCreatedAt;
+use Medine\ERP\Locations\Domain\ValueObject\LocationAddress;
 use Medine\ERP\Locations\Domain\ValueObject\LocationId;
 use Medine\ERP\Locations\Domain\ValueObject\LocationItemState;
 use Medine\ERP\Locations\Domain\ValueObject\LocationMainContact;
 use Medine\ERP\Locations\Domain\ValueObject\LocationName;
 use Medine\ERP\Locations\Domain\ValueObject\LocationState;
-use Medine\ERP\Shared\Domain\ValueObjects\DateTimeValueObject;
+use Medine\ERP\Locations\Domain\ValueObject\LocationUpdatedAt;
 
 final class Location
 {
@@ -22,10 +23,12 @@ final class Location
     private $name;
     private $mainContact;
     private $barcode;
-    private $state;
-    private $direction;
-    private $companyId;
+    private $address;
     private $itemState;
+    private $state;
+    private $companyId;
+    private $createdBy;
+    private $updatedBy;
     private $createdAt;
     private $updatedAt;
 
@@ -35,12 +38,14 @@ final class Location
         LocationName $name,
         LocationMainContact $mainContact,
         LocationBarcode $barcode,
-        LocationState $state,
-        LocationDirection $direction,
-        LocationCompanyId $companyId,
+        LocationAddress $address,
         LocationItemState $itemState,
-        DateTimeValueObject $createdAt,
-        DateTimeValueObject $updatedAt
+        LocationState $state,
+        LocationCompanyId $companyId,
+        int $createdBy,
+        int $updatedBy,
+        LocationCreatedAt $createdAt,
+        LocationUpdatedAt $updatedAt
     )
     {
         $this->id = $id;
@@ -48,10 +53,12 @@ final class Location
         $this->name = $name;
         $this->mainContact = $mainContact;
         $this->barcode = $barcode;
-        $this->state = $state;
-        $this->direction = $direction;
-        $this->companyId = $companyId;
+        $this->address = $address;
         $this->itemState = $itemState;
+        $this->state = $state;
+        $this->companyId = $companyId;
+        $this->createdBy = $createdBy;
+        $this->updatedBy = $updatedBy;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
     }
@@ -62,40 +69,11 @@ final class Location
         LocationName $name,
         LocationMainContact $mainContact,
         LocationBarcode $barcode,
-        LocationState $state,
-        LocationDirection $direction,
-        LocationCompanyId $companyId,
-        LocationItemState $itemState
-    ): self
-    {
-        return new self(
-            $id,
-            $code,
-            $name,
-            $mainContact,
-            $barcode,
-            new LocationState('to_be_approved'),
-            $direction,
-            $companyId,
-            $itemState,
-            DateTimeValueObject::now(),
-            DateTimeValueObject::now()
-
-        );
-    }
-
-    public static function fromDatabase(
-        LocationId $id,
-        LocationCode $code,
-        LocationName $name,
-        LocationMainContact $mainContact,
-        LocationBarcode $barcode,
-        LocationState $state,
-        LocationDirection $direction,
-        LocationCompanyId $companyId,
+        LocationAddress $address,
         LocationItemState $itemState,
-        DateTimeValueObject $createdAt,
-        DateTimeValueObject $updatedAt
+        LocationState $state,
+        LocationCompanyId $companyId,
+        int $createdBy
     ): self
     {
         return new self(
@@ -104,12 +82,14 @@ final class Location
             $name,
             $mainContact,
             $barcode,
-            $state,
-            $direction,
-            $companyId,
+            $address,
             $itemState,
-            $createdAt,
-            $updatedAt
+            $state,
+            $companyId,
+            $createdBy,
+            $createdBy,
+            new LocationCreatedAt(),
+            new LocationUpdatedAt()
         );
     }
 
@@ -143,9 +123,9 @@ final class Location
         return $this->state;
     }
 
-    public function direction(): LocationDirection
+    public function address(): LocationAddress
     {
-        return $this->direction;
+        return $this->address;
     }
 
     public function companyId(): LocationCompanyId
@@ -158,77 +138,23 @@ final class Location
         return $this->itemState;
     }
 
-    public function createdAt(): DateTimeValueObject
+    public function createdBy(): int
+    {
+        return $this->createdBy;
+    }
+
+    public function updatedBy(): int
+    {
+        return $this->updatedBy;
+    }
+
+    public function createdAt(): LocationCreatedAt
     {
         return $this->createdAt;
     }
 
-    public function updatedAt(): DateTimeValueObject
+    public function updatedAt(): LocationUpdatedAt
     {
         return $this->updatedAt;
-    }
-
-    public function changeCode(LocationCode $code)
-    {
-        if (false === ($this->code()->equals($code))) {
-            $this->code = $code;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeName(LocationName $name)
-    {
-        if (false === ($this->name()->equals($name))) {
-            $this->name = $name;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeMainContact(LocationMainContact $mainContact)
-    {
-        if (false === ($this->mainContact()->equals($mainContact))) {
-            $this->mainContact = $mainContact;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeBarcode(LocationBarcode $barcode)
-    {
-        if (false === ($this->barcode()->equals($barcode))) {
-            $this->barcode = $barcode;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeState(LocationState $state)
-    {
-        if (false === ($this->state()->equals($state))) {
-            $this->state = $state;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeDirection(LocationDirection $direction)
-    {
-        if (false === ($this->direction()->equals($direction))) {
-            $this->direction = $direction;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeCompanyId(LocationCompanyId $companyId)
-    {
-        if (false === ($this->companyId()->equals($companyId))) {
-            $this->companyId = $companyId;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
-    }
-
-    public function changeItemState(LocationItemState $itemState)
-    {
-        if (false === ($this->itemState()->equals($itemState))) {
-            $this->itemState = $itemState;
-            $this->updatedAt = DateTimeValueObject::now();
-        }
     }
 }

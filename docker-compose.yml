@@ -34,7 +34,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: php
+    container_name: php1
     volumes:
       - .:/var/www/html
     ports:
