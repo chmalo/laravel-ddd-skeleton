@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Medine\ERP\PurchaseInvoices\Application\Create\PurchaseInvoiceCreator;
 use Medine\ERP\PurchaseInvoices\Application\Create\PurchaseInvoiceCreatorRequest;
 use Medine\ERP\PurchaseInvoices\Application\Update\PurchaseInvoiceUpdater;
-use Medine\ERP\PurchaseInvoices\Application\Update\LocationUpdaterRequest;
+use Medine\ERP\PurchaseInvoices\Application\Update\PurchaseInvoiceUpdaterRequest;
 
 final class PurchaseInvoicePutController extends Controller
 {
@@ -23,7 +23,7 @@ final class PurchaseInvoicePutController extends Controller
 
     public function __invoke(string $id, Request $request)
     {
-        ($this->updater)(new LocationUpdaterRequest(
+        ($this->updater)(new PurchaseInvoiceUpdaterRequest(
             $id,
             $request->providerId,
             $request->paymentTerm,
