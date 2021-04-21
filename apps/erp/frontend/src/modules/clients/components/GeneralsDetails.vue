@@ -56,18 +56,16 @@
                         <label>Tipo de cliente <span class="text-danger">*</span></label>
                         <select class="form-control inp-filter" required="" v-model="clientType">
                             <option value="">Seleccione</option>
-                            <option value="tip-1">Tipo 1</option>
-                            <option value="tip-2">Tipo 2</option>
-                            <option value="tip-3">Tipo 3</option>
+                            <option :value="category.id" v-for="category in catalogs.clientTypes"
+                                    v-html="category.title" :key="category.id"></option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label>Categoría de cliente <span class="text-danger">*</span></label>
                         <select class="form-control inp-filter" required="" v-model="clientCategory">
                             <option value="">Seleccione</option>
-                            <option value="cat-1">Categoria 1</option>
-                            <option value="cat-2">Categoria 2</option>
-                            <option value="cat-3">Categoria 3</option>
+                            <option :value="category.id" v-for="category in catalogs.clientCategories"
+                                    v-html="category.title" :key="category.id"></option>
                         </select>
                     </div>
                     <div class="col-md-3" id="div_limite_ventas">
@@ -137,10 +135,12 @@
 <script lang="ts">
 import {defineComponent, onMounted, ref, watch} from "vue";
 import {useClient} from "@/modules/clients/use/useClient";
+import {useCatalog} from "@/modules/clients/use/useCatalog";
 
 export default defineComponent({
     setup() {
         const {client} = useClient();
+        const {catalogs} = useCatalog();
 
         const name = ref('')
         const lastname = ref('')
@@ -183,6 +183,7 @@ export default defineComponent({
             clientCategory,
             frequentClientNumber,
             state,
+            catalogs,
         };
     }
 });

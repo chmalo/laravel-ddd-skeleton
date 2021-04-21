@@ -39,7 +39,7 @@ final class ClientesCatalogsGetController extends Controller
         return function (ClientCategoryResponse $categoryResponse) {
             return [
                 'id' => $categoryResponse->id(),
-                'name' => $categoryResponse->name()
+                'title' => $categoryResponse->name()
             ];
         };
     }
@@ -49,7 +49,7 @@ final class ClientesCatalogsGetController extends Controller
         return function (ClientTypeResponse $typeResponse) {
             return [
                 'id' => $typeResponse->id(),
-                'name' => $typeResponse->name()
+                'title' => $typeResponse->name()
             ];
         };
     }

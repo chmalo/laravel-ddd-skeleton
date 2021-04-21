@@ -14,18 +14,23 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, nextTick, onMounted, ref} from 'vue'
+import {defineComponent, nextTick, onMounted, ref, watch} from 'vue'
 import {useCore} from "@/modules/shared/use/useCore";
 import {useRouter} from "vue-router";
+import {useAuth} from "@/modules/auth/use/useAuth";
+import {Company} from "@/modules/auth/types/Company";
+
 import {useClient} from "@/modules/clients/use/useClient";
+import {useCatalog} from "@/modules/clients/use/useCatalog";
 
 import Breadcrums from '@/components/Breadcrums.vue';
 import FormButtons from "@/components/FormButtons.vue";
+import toastr from "toastr";
+
 import GeneralsDetails from "@/modules/clients/components/GeneralsDetails.vue";
 import ContactInformation from "@/modules/clients/components/ContactInformation.vue";
 import PaymentInformation from "@/modules/clients/components/PaymentInformation.vue";
 import UsersAssignedClient from "@/modules/clients/components/UsersAssignedClient.vue";
-import toastr from "toastr";
 
 export default defineComponent({
     components: {Breadcrums, FormButtons, GeneralsDetails, ContactInformation, PaymentInformation, UsersAssignedClient},
@@ -43,11 +48,21 @@ export default defineComponent({
         const sending = ref(false)
         const breadcrumbUrl: string = ERP_URL + '/api/client/breadcrumbs'
 
+        const {user} = useAuth();
+        const {getCatalog} = useCatalog()
 
         onMounted(async () => {
+            await getCatalog();
             await find(props.id ? props.id : '')
             nextTick(() => loading.value = false);
         });
+
+        //when changeCompany
+        watch(() => user.value?.company, async (company: Company | undefined) => {
+            if (company) {
+                router.push({name: 'clients'});
+            }
+        })
 
         function cancel(): void {
             router.push({name: 'clients'});

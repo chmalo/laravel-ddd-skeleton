@@ -14,18 +14,23 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, ref} from 'vue'
+import {defineComponent, onMounted, ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
 import {useCore} from "@/modules/shared/use/useCore";
+import {useAuth} from "@/modules/auth/use/useAuth";
+import {Company} from "@/modules/auth/types/Company";
+
 import {useClient} from "@/modules/clients/use/useClient";
+import {useCatalog} from "@/modules/clients/use/useCatalog";
 
 import Breadcrums from '@/components/Breadcrums.vue';
 import FormButtons from "@/components/FormButtons.vue";
+import toastr from "toastr";
+
 import GeneralsDetails from "@/modules/clients/components/GeneralsDetails.vue";
 import ContactInformation from "@/modules/clients/components/ContactInformation.vue";
 import PaymentInformation from "@/modules/clients/components/PaymentInformation.vue";
 import UsersAssignedClient from "@/modules/clients/components/UsersAssignedClient.vue";
-import toastr from "toastr";
 
 export default defineComponent({
     components: {
@@ -43,10 +48,24 @@ export default defineComponent({
         const loading = ref(true);
         const sending = ref(false)
         const {create, reset} = useClient()
+        const {getCatalog} = useCatalog()
+        const {user} = useAuth();
 
-        onMounted(async () => {
+        async function initComponent() {
+            await getCatalog();
             await reset();
             loading.value = false
+        }
+
+        onMounted(async () => {
+            initComponent()
+        })
+
+        //when changeCompany
+        watch(() => user.value?.company, async (company: Company | undefined) => {
+            if (company) {
+                initComponent()
+            }
         })
 
         function cancel(): void {
