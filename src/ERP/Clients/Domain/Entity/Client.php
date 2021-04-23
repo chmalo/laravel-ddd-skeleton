@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-
 namespace Medine\ERP\Clients\Domain\Entity;
 
 
+use Medine\ERP\Clients\Domain\Events\ClientInactivatedDomainEvent;
 use Medine\ERP\Clients\Domain\ValueObjects\ClientClientCategory;
 use Medine\ERP\Clients\Domain\ValueObjects\ClientClientType;
 use Medine\ERP\Clients\Domain\ValueObjects\ClientCompanyId;
@@ -19,7 +19,10 @@ use Medine\ERP\Clients\Domain\ValueObjects\ClientName;
 use Medine\ERP\Clients\Domain\ValueObjects\ClientState;
 use Medine\ERP\Clients\Domain\ValueObjects\ClientUpdatedAt;
 
-final class Client
+use Medine\ERP\Shared\Domain\Aggregate\AggregateRoot;
+use Medine\ERP\Shared\Domain\ValueObjects\Uuid;
+
+final class Client extends AggregateRoot
 {
     private $id;
     private $companyId;
@@ -36,6 +39,9 @@ final class Client
 
     private $phones;
     private $emails;
+
+    const ACTIVE = 'active';
+    const INACTIVE = 'inactive';
 
     private function __construct(
         ClientId $id,
@@ -252,10 +258,24 @@ final class Client
 
     public function changeState(ClientState $newState)
     {
-        if (false === ($this->state()->equals($newState))) {
-            $this->state = $newState;
-            $this->updatedAt = new ClientUpdatedAt();
+        if ($this->state()->equals($newState)){
+            return;
         }
+
+        if($this->state->value() === self::ACTIVE &&
+            $newState->value() == self::INACTIVE
+        ){
+            $this->record(new ClientInactivatedDomainEvent(
+                Uuid::random()->value(),
+                $this->name->value(),
+                $this->state,
+                $newState
+            ));
+        }
+
+
+        $this->state = $newState;
+        $this->updatedAt = new ClientUpdatedAt();
     }
 
     public function restartPhones()
