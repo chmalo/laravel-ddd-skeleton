@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Medine\ERP\ItemCategories\Domain\Entity;
 
-final class ItemCategory
+use Medine\ERP\ItemCategories\Domain\Event\ItemCategoryStateChangedDomainEvent;
+use Medine\ERP\Shared\Domain\Aggregate\AggregateRoot;
+use Medine\ERP\Shared\Domain\ValueObjects\Uuid;
+
+final class ItemCategory extends AggregateRoot
 {
     private $id;
     private $name;
@@ -150,6 +154,11 @@ final class ItemCategory
     {
         if ($state !== $this->state) {
             $this->state = $state;
+            $this->record(new ItemCategoryStateChangedDomainEvent(
+                Uuid::random()->value(),
+                $this->state,
+                $state
+            ));
             $this->updatedAt = new \DateTimeImmutable();
         }
     }

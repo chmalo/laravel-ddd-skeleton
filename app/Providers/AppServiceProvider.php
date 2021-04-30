@@ -8,6 +8,7 @@ use Medine\ERP\ClientCategories\Infrastructure\Persistence\MysqlClientCategoryRe
 use Medine\ERP\Clients\Application\Subscriber\InvoicesInactiverOnClientInactivated;
 use Medine\ERP\ClientTypes\Domain\Contracts\ClientTypeRepository;
 use Medine\ERP\ClientTypes\Infrastructure\Persistence\MysqlClientTypesRepository;
+use Medine\ERP\ItemCategories\Application\Subscriber\StateChangeBinnacleRecorderOnItemCategoryStateChanged;
 use Medine\ERP\ItemCategories\Domain\Entity\ItemCategoryRepository;
 use Medine\ERP\ItemCategories\Infrastructure\Persistence\MySqlItemCategoryRepository;
 use Medine\ERP\Locations\Domain\LocationRepository;
@@ -59,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
     private $domainEventSubscriber = [
         SendEmailNotificationOnPasswordResetCreated::class,
         InvoicesInactiverOnClientInactivated::class,
+        StateChangeBinnacleRecorderOnItemCategoryStateChanged::class,
     ];
 
 
