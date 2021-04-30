@@ -4,6 +4,7 @@ import axios from "axios";
 import {useFilters} from "@/modules/clients/use/useFilters";
 import {useClient} from "@/modules/clients/use/useClient";
 import {useAuth} from "@/modules/auth/use/useAuth";
+import {Catalog} from "@/modules/clients/types/Catalog";
 
 export const api = {
     async getClients(): Promise<Client[]> {
@@ -102,4 +103,12 @@ export const api = {
             resolve(response.data);
         });
     },
+
+    async getCatalog(): Promise<Catalog> {
+        const {currentCompanyId} = useAuth();
+        const response = await axios.get(process.env.VUE_APP_ERP_URL + '/api/client/catalogs/' + currentCompanyId());
+        return new Promise(resolve => {
+            resolve(response.data);
+        });
+    }
 }

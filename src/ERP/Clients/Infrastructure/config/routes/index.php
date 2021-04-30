@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Medine\Apps\ERP\Backend\Controller\Clients\ClientBreadcrumbsPostController;
+use Medine\Apps\ERP\Backend\Controller\Clients\ClientesCatalogsGetController;
 use Medine\Apps\ERP\Backend\Controller\Clients\ClientesGetController;
 use Medine\Apps\ERP\Backend\Controller\Clients\ClientGetController;
 use Medine\Apps\ERP\Backend\Controller\Clients\ClientOptionsGetController;
@@ -19,6 +20,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/client/states/{id}', ClientStatesGetController::class);
     Route::get('/client/options/{id}', ClientOptionsGetController::class);
     Route::get('/client', ClientesGetController::class);
+    Route::get('/client/catalogs/{companyId}', ClientesCatalogsGetController::class);
 
     Route::put('/client/{id}', ClientPutController::class);
     Route::put('/client/state/{id}', ClientStatePutController::class);

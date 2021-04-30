@@ -22,7 +22,7 @@ final class ClientStatePutController extends Controller
     public function __invoke(string $id, Request $request)
     {
         ($this->updater)(new ClientStateUpdaterRequest(
-            $request->id,
+            $id,
             $request->state,
         ));
 

@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Medine\ERP\ClientCategories\Domain\Contracts\ClientCategoryRepository;
 use Medine\ERP\ClientCategories\Infrastructure\Persistence\MysqlClientCategoryRepository;
+use Medine\ERP\Clients\Application\Subscriber\InvoicesInactiverOnClientInactivated;
 use Medine\ERP\ClientTypes\Domain\Contracts\ClientTypeRepository;
 use Medine\ERP\ClientTypes\Infrastructure\Persistence\MysqlClientTypesRepository;
 use Medine\ERP\ItemCategories\Domain\Entity\ItemCategoryRepository;
@@ -54,6 +55,13 @@ class AppServiceProvider extends ServiceProvider
         ItemCategoryRepository::class => MySqlItemCategoryRepository::class
     ];
 
+
+    private $domainEventSubscriber = [
+        SendEmailNotificationOnPasswordResetCreated::class,
+        InvoicesInactiverOnClientInactivated::class,
+    ];
+
+
     /**
      * Register any application services.
      *
@@ -86,11 +94,6 @@ class AppServiceProvider extends ServiceProvider
             return new InMemorySymfonyEventBus($subscribers);
         });
 
-        $this->app->tag(
-            [
-                SendEmailNotificationOnPasswordResetCreated::class
-            ],
-            [self::TAGGED_SUBSCRIBERS]
-        );
+        $this->app->tag($this->domainEventSubscriber, [self::TAGGED_SUBSCRIBERS]);
     }
 }
