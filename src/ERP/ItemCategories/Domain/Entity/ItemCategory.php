@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medine\ERP\ItemCategories\Domain\Entity;
 
 use Medine\ERP\ItemCategories\Domain\Event\ItemCategoryStateChangedDomainEvent;
+use Medine\ERP\ItemCategories\Domain\Event\NameChagedDomainEvent;
 use Medine\ERP\Shared\Domain\Aggregate\AggregateRoot;
 use Medine\ERP\Shared\Domain\ValueObjects\Uuid;
 
@@ -139,6 +140,12 @@ final class ItemCategory extends AggregateRoot
         if ($name !== $this->name) {
             $this->name = $name;
             $this->updatedAt = new \DateTimeImmutable();
+
+            $this->record(new NameChagedDomainEvent(
+                Uuid::random()->value(),
+                $this->name,
+                $name
+            ));
         }
     }
 
@@ -154,11 +161,13 @@ final class ItemCategory extends AggregateRoot
     {
         if ($state !== $this->state) {
             $this->state = $state;
+
             $this->record(new ItemCategoryStateChangedDomainEvent(
                 Uuid::random()->value(),
                 $this->state,
                 $state
             ));
+
             $this->updatedAt = new \DateTimeImmutable();
         }
     }
